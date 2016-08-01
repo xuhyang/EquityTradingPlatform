@@ -2,6 +2,7 @@ package com.tripPropper.marketData;
 
 
 
+import com.sun.xml.internal.bind.v2.TODO;
 import com.tripPropper.business.api.StocksManager;
 import com.tripPropper.business.models.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,10 +90,11 @@ public class MarketDataFeed {
             stocks.forEach(stock -> updateStockByResponse(stock, bufferedReader));
             bufferedReader.close();
         } catch (IOException e) {
-            System.out.println("file not found");
+            System.out.println("[MarketDataFeed] No response from yahoo api");
         }
     }
 
+    //TODO: modify date for closing price
     private void updateStockByResponse(Stock stock, BufferedReader bufferedReader) {
         String[] stockInfoList;
         LocalDate today = LocalDate.now();// set this up however you need it.

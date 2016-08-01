@@ -1,5 +1,6 @@
 package com.tripPropper.orderExecution;
 
+import com.tripPropper.business.api.TradesManager;
 import com.tripPropper.business.models.Trade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -26,6 +27,7 @@ public class TradePublisher {
     JmsTemplate jmsTemplate;
 
     private static JAXBContext context;
+
 
     {
         try {

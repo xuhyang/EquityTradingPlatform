@@ -3,6 +3,7 @@ package com.tripPropper.business.api;
 import com.tripPropper.business.models.Stock;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -13,10 +14,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class StocksManager {
 
-    private List<Stock> stocks = new CopyOnWriteArrayList<>();
+    private List<Stock> stocks;
 
 
     public StocksManager() {}
+
+
+    @PostConstruct
+    public void loadStocksFromDB() {
+        stocks = new CopyOnWriteArrayList<>();
+    }
 
 
     public Stock getStock(String stockCode,int longAvgMins) {
