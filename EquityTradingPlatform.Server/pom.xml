@@ -37,6 +37,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-integration</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>0.7.5</version>
+        </dependency>
 
         <!--JMS support-->
         <dependency>
@@ -51,7 +56,10 @@
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-broker</artifactId>
         </dependency>
+
+
     </dependencies>
+
 
     <build>
         <plugins>

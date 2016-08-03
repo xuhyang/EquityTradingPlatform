@@ -12,6 +12,8 @@ public class TwoMovingAvg implements Strategy {
     int longAvgMins;
     int shortAvgMins;
     Stock stock;
+
+
     int id;
 
 
@@ -20,13 +22,38 @@ public class TwoMovingAvg implements Strategy {
     }
 
     @Override
-    public void start() {
+    public void updatePriceAverage() {
 
     }
 
     @Override
-    public void stop() {
+    public void run() {
 
+    }
+
+    @Override
+    public StrategyInfo getStrategyInfo() {
+        return null;
+    }
+
+    @Override
+    public void openPosition() {
+
+    }
+
+    @Override
+    public void closePosition() {
+
+    }
+
+    @Override
+    public void recordExecution() {
+
+    }
+
+    @Override
+    public boolean isOpen() {
+        return false;
     }
 
     @Override

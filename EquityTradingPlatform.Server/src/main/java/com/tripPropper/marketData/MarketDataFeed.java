@@ -2,8 +2,9 @@ package com.tripPropper.marketData;
 
 
 
-import com.sun.xml.internal.bind.v2.TODO;
+
 import com.tripPropper.business.api.StocksManager;
+import com.tripPropper.business.api.StrategiesManager;
 import com.tripPropper.business.models.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.List;
+
 
 /**
  * Created by xy30164 on 7/29/2016.
@@ -25,31 +26,37 @@ import java.util.List;
 @Component
 public class MarketDataFeed {
 
-    private List<Stock> stocks;
-
-    private int second = 2;
-
+    @Autowired
+    private StocksManager stocksManager;
 
     @Autowired
-    public MarketDataFeed(StocksManager stocksManager) {
-        this.stocks = stocksManager.getStocks();
-    }
+    private StrategiesManager strategiesManager;
+
+    private int milliSec = 1000;
 
 
-    //use a scheduler and add a stop function
     @PostConstruct
     public void start() {
         new Thread(this::updateStocksInRate).start();
-    }
+}
 
+    //use a scheduler and add a stop function
     private void updateStocksInRate() {
         while (true) {
-            updateStocks();
-            try {
-                Thread.sleep(second * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (stocksManager.getStocks().size() != 0) {
+                updateStocks();
+                strategiesManager.runStrategies();
             }
+
+            sleep();
+        }
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(milliSec);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -58,7 +65,7 @@ public class MarketDataFeed {
         readResponseAndUpdate(urlConnection);
     }
 
-
+//"http://gcotvmsw725008:8080/MockYahoo/quotes.csv?s=" "a0b0"
     private URLConnection createConnection() {
         URL url;
         URLConnection urlConnection = null;
@@ -69,9 +76,9 @@ public class MarketDataFeed {
             stringBuilder = new StringBuilder();
             stringBuilder.append(baseUrl);
             //if (i != stocksSize - 1)
-            stocks.forEach(stock -> stringBuilder.append(stock.getStockCode() + ","));
+            stocksManager.getStocks().forEach(stock -> stringBuilder.append(stock.getStockCode() + ","));
             stringBuilder.append("&f=");
-            stringBuilder.append("b2b3op");
+            stringBuilder.append("a0b0op");
             stringBuilder.append("&e=.csv");
             url = new URL(stringBuilder.toString());
             urlConnection = url.openConnection();
@@ -84,13 +91,14 @@ public class MarketDataFeed {
     private void readResponseAndUpdate(URLConnection urlConnection) {
         if (urlConnection == null)
             return;
+        System.out.println(urlConnection.getURL());
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            stocks.forEach(stock -> updateStockByResponse(stock, bufferedReader));
+            stocksManager.getStocks().forEach(stock -> updateStockByResponse(stock, bufferedReader));
             bufferedReader.close();
         } catch (IOException e) {
-            System.out.println("[MarketDataFeed] No response from yahoo api");
+            e.printStackTrace();
         }
     }
 
@@ -107,6 +115,7 @@ public class MarketDataFeed {
 
         try {
             stockInfoList = bufferedReader.readLine().split(",");
+
             if (!stockInfoList[0].equals("N/A"))
                 stock.setAsk(Double.valueOf(stockInfoList[0]));
             if (!stockInfoList[1].equals("N/A"))
@@ -120,13 +129,6 @@ public class MarketDataFeed {
         }
 
     }
-
-
-
-
-
-
-
 
 }
 

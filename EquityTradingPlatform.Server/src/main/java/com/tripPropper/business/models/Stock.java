@@ -21,6 +21,8 @@ public class Stock {
 
     private Double bid;
 
+    private int size = 10;
+
     private Map<LocalDate, Double> openPrices;
 
     private Map<LocalDate, Double> closingPrices;
@@ -28,16 +30,25 @@ public class Stock {
 
     public Stock(String stockCode) {
         this.stockCode = stockCode;
-        setMinAvgSize(10);
+        setMinAvgSize(size);
         this.closingPrices = new ConcurrentHashMap<>();
         this.openPrices = new ConcurrentHashMap<>();
     }
 
     public Stock(String stockCode, int longAvgMins) {
         this.stockCode = stockCode;
-        setMinAvgSize(longAvgMins);
+        this.size = longAvgMins;
+        setMinAvgSize(size);
         this.closingPrices = new ConcurrentHashMap<>();
         this.openPrices = new ConcurrentHashMap<>();
+    }
+
+    public BlockingDeque<Double> getAsks() {
+        return asks;
+    }
+
+    public BlockingDeque<Double> getBids() {
+        return bids;
     }
 
     public String getStockCode() {
@@ -76,13 +87,30 @@ public class Stock {
         setCurrentBid(bid);
     }
 
-    public Map<LocalDate, Double> getOpenPrices() {
-        return openPrices;
+    public double getBidAverage(){
+        int size = bids.size();
+        if (bids.size() != this.size)
+            return -1;
+        else {
+            double total = 0;
+            for (double bid : bids)
+                total += bid;
+            return total / size;
+        }
     }
 
-    public Map<LocalDate, Double> getClosingPrices() {
-        return closingPrices;
+    public double getAskAverage(){
+        int size = asks.size();
+        if (asks.size() != this.size)
+            return -1;
+        else {
+            double total = 0;
+            for (double ask : asks)
+                total += ask;
+            return total / size;
+        }
     }
+
 
     public void setOpenPrice(LocalDate date, Double price) {
         openPrices.put(date, price);

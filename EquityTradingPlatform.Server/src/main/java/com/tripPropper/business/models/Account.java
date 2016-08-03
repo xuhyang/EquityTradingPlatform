@@ -7,5 +7,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Account {
 
-    private AtomicInteger balance;
+    private double balance;
+
+    public synchronized double getBalance() {
+        return balance;
+    }
+
+    public synchronized void setBalance(double balance) {
+        this.balance = balance;
+    }
 }

@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class StocksManager {
 
-    private List<Stock> stocks;
+    private List<Stock> stocks = new CopyOnWriteArrayList<>();
 
 
     public StocksManager() {}

@@ -1,5 +1,6 @@
 package com.tripPropper.business.strategies.Impl;
 
+import com.tripPropper.business.models.Stock;
 import com.tripPropper.business.models.StrategyInfo;
 import com.tripPropper.business.strategies.Strategy;
 
@@ -17,14 +18,38 @@ public class PriceBreakout implements Strategy {
 
 
     @Override
-    @PostConstruct
-    public void start() {
+    public void updatePriceAverage() {
 
     }
 
     @Override
-    public void stop() {
+    public void run() {
 
+    }
+
+    @Override
+    public StrategyInfo getStrategyInfo() {
+        return null;
+    }
+
+    @Override
+    public void openPosition() {
+
+    }
+
+    @Override
+    public void closePosition() {
+
+    }
+
+    @Override
+    public void recordExecution() {
+
+    }
+
+    @Override
+    public boolean isOpen() {
+        return false;
     }
 
     @Override
